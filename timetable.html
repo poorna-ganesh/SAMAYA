@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generated Timetable</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h2>Your Smart Timetable</h2>
+    {% if summary %}
+    <p>{{ summary }}</p>
+    {% endif %}
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Day</th>
+          {% for i in range(timetable['Monday']|length) %}
+            <th>Period {{ i + 1 }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for day, periods in timetable.items() %}
+        <tr>
+          <td>{{ day }}</td>
+          {% for subject in periods %}
+          <td>{{ subject }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <br>
+
+    {% if not regenerate %}
+    <h3>Regenerate Timetable (Teacher Unavailability)</h3>
+    <form action="/regenerate" method="POST">
+      <label>Unavailable Teachers:</label>
+      <input type="text" name="unavailable_teachers[]" placeholder="Teacher Name">
+      <input type="text" name="unavailable_teachers[]" placeholder="Teacher Name">
+      <button type="submit">Regenerate TT</button>
+    </form>
+    {% else %}
+    <a href="/">← Generate Again</a>
+    {% endif %}
+  </div>
+</body>
+</html>
+
